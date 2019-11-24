@@ -1,0 +1,36 @@
+
+
+@property
+def desc_tipo(self):
+    return self.__desc_tipo
+
+@desc_tipo.setter
+def desc_tipo(self, x):
+    self.__desc_tipo = x
+
+
+@property
+def valor(self):
+    return self.__valor
+
+@valor.setter
+def valor(self, x):
+    self.__valor = x
+
+
+@property
+def cod_tipo(self):
+    return self.__cod_tipo
+
+@cod_tipo.setter
+def cod_tipo(self, x):
+    self.__cod_tipo = x
+
+
+@property
+def desc_detalhada(self):
+    return self.__desc_detalhada
+
+@desc_detalhada.setter
+def desc_detalhada(self, x):
+    self.__desc_detalhada = x
