@@ -1,7 +1,8 @@
 
 
 class Bem:
-    def __init__(self, cod_tipo="", desc_tipo="", desc_detalhada="", valor=0):
+    def __init__(self, id_candidato="", cod_tipo="", desc_tipo="", desc_detalhada="", valor=0):
+        self.__id_candidato = id_candidato
         self.__cod_tipo = cod_tipo # Código do tipo de bem
         self.__desc_tipo = desc_tipo # Descrição do tipo de bem
         self.__desc_detalhada = desc_detalhada # Descrição detalhada do bem
@@ -9,7 +10,7 @@ class Bem:
     
     def __str__(self):
         out = f"""
-        {self.__cod_tipo} -- {self.__desc_tipo} -- {self.__valor} Descrição: {self.__desc_detalhada[:80]}
+        {self.__cod_tipo} -- {self.__desc_tipo} -- {self.__id_candidato} -- {self.__valor} Descrição: {self.__desc_detalhada[:80]}
         """
 
         return out
@@ -61,6 +62,14 @@ class Bem:
         else:
             return self.__valor != item
     
+    @property
+    def id_candidato(self):
+        return self.__id_candidato
+
+    @id_candidato.setter
+    def id_candidato(self, x):
+        self.__id_candidato = x
+
     @property
     def desc_tipo(self):
         return self.__desc_tipo

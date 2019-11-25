@@ -1,6 +1,7 @@
+from DoubleChainList import DoubleChainList
 
 class Candidato:
-    def __init__(self, ano_eleicao="", uf="", cod_cargo="", descricao_cargo="", nome_candidato="", id_candidato="", numero_na_urna="", cpf="", nome_na_urna="", numero_partido="", nome_partido="", sigla_partido="", cod_ocupacao_candidato="", descricao_ocupacao="", data_nascimento="", sexo="", grau_instrução="", estado_civil="", uf_nascimento="", municipio_nascimento="", situacao_pos_pleito="", situacao_candidatura="", bens=[]):
+    def __init__(self, ano_eleicao="", uf="", cod_cargo="", descricao_cargo="", nome_candidato="", id_candidato="", numero_na_urna="", cpf="", nome_na_urna="", numero_partido="", nome_partido="", sigla_partido="", cod_ocupacao_candidato="", descricao_ocupacao="", data_nascimento="", sexo="", grau_instrução="", estado_civil="", uf_nascimento="", municipio_nascimento="", situacao_pos_pleito="", situacao_candidatura="", bens=DoubleChainList()):
         self.__ano_eleicao = ano_eleicao # Ano da eleição
         self.__uf = uf # Sigla da UF
         self.__cod_cargo = cod_cargo# Código do Cargo
@@ -35,12 +36,13 @@ class Candidato:
         \t- Total por tipo de bem:\n
         """
 
-        tipo_bens: {}
+        tipo_bens = {}
 
-        for bem in self.__bens:
+        for i in range(self.__bens.length):
+            bem = self.__bens[i]
             tipo_bens[bem.desc_tipo] = bem.valor + (0 if bem.desc_tipo not in tipo_bens else tipo_bens[bem.desc_tipo])
 
-        for tipo, valor in tipo_bens.itens():
+        for tipo, valor in tipo_bens.items():
             out += f"\t\t- {tipo}: R$ {valor}"
 
         return out
@@ -100,9 +102,10 @@ class Candidato:
     def bens_str():
         return "\n".join([str(bem) for bem in self.__bens])
 
-    # @bens.setter
-    # def bens(self, x):
-    #     self.__bens = x
+    @bens.setter
+    def bens(self, x):
+        if isinstance(x, DoubleChainList):
+            self.__bens = x
 
     def append_bem(x):
         self.__bens.append(x)
