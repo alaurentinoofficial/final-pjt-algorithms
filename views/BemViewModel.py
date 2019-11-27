@@ -18,5 +18,4 @@ class BemViewModel:
         for attr, csv_pos in maps.items():
             setattr(out, attr, attrs[csv_pos])
         
-        print(out.id_candidato)
         return out

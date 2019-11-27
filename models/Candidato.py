@@ -95,19 +95,23 @@ class Candidato:
             return self.__nome_candidato != item
 
     @property
+    def total_declarado(self):
+        return sum([bem.valor for bem in self.__bens])
+
+    @property
     def bens(self):
         return self.__bens
 
     @property
-    def bens_str():
+    def bens_str(self):
         return "\n".join([str(bem) for bem in self.__bens])
 
-    @bens.setter
-    def bens(self, x):
-        if isinstance(x, DoubleChainList):
-            self.__bens = x
+    # @bens.setter
+    # def bens(self, x):
+    #     if isinstance(x, DoubleChainList):
+    #         self.__bens = x
 
-    def append_bem(x):
+    def append_bem(self, x):
         self.__bens.append(x)
     
     @property

@@ -41,12 +41,16 @@ class Node:
 
 class DoubleChainList:
 
-    def __init__(self):
+    def __init__(self, interable=None, compare=lambda a, b: Ordering.compare(a, b, asceding=True, key=lambda x: x)):
         self.__root = None
         self.__top = None
         self.__size = 0
-        self.__compare = lambda a, b: Ordering.compare(a, b, asceding=True, key=lambda x: x)
+        self.__compare = compare
         self.__interations = 0
+
+        if interable != None:
+            for item in interable:
+                self.append(item)
     
     def __iter__(self):
         self.__interations = 0
