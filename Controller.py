@@ -4,7 +4,7 @@ from views import CandidatoViewModel, BemViewModel
 from DoubleChainList import DoubleChainList
 
 
-class Controle():
+class Controller():
     def __init__(self):
         self.__candidatos = DoubleChainList()
     
@@ -69,7 +69,7 @@ class Controle():
 
 def main():
     times = {}
-    c = Controle()
+    c = Controller()
 
     start = time.time()
     c.load_candidatos("./data/candidatos/")
