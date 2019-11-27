@@ -16,6 +16,7 @@ class BemViewModel:
         out = Bem()
 
         for attr, csv_pos in maps.items():
-            setattr(out, attr, attrs[csv_pos])
-        
+            value = attrs[csv_pos] if attr != "valor" else float(attrs[csv_pos].replace(',', '.'))
+            setattr(out, attr, value)
+
         return out

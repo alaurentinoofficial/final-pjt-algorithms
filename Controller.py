@@ -1,12 +1,13 @@
 import os, time
+from utils import list_csv_from
 from models import Candidato, Bem
 from views import CandidatoViewModel, BemViewModel
-from DoubleChainList import DoubleChainList
+from DoubleChainList import DoubleChainList, Ordering
 
 
 class Controller():
-    def __init__(self):
-        self.__candidatos = DoubleChainList()
+    def __init__(self, orderby=lambda a, b: Ordering.compare(a, b, asceding=True, key=lambda x: x)):
+        self.__candidatos = DoubleChainList(orderby=orderby)
     
     @property
     def candidatos(self):
@@ -14,28 +15,24 @@ class Controller():
 
     # TODO 1 OK
     def load_candidatos(self, local):
-        for filename in os.listdir(local):
-            if filename.endswith(".csv"):
-
-                with open(local + filename, 'r') as file:
-                    for line in file.readlines()[1:100]:
-                        c = CandidatoViewModel.from_csv(line)
-                        self.__candidatos.append(c)
+        for filename in list_csv_from(local):
+            with open(local + filename, 'r') as file:
+                for line in file.readlines()[1:20]:
+                    c = CandidatoViewModel.from_csv(line)
+                    self.__candidatos.append(c)
     
     # TODO 2 OK
     def load_bens(self, local):
         bens = DoubleChainList()
 
-        for filename in os.listdir(local):
-            if filename.endswith(".csv"):
+        for filename in list_csv_from(local):
+            with open(local + filename, 'r') as file:
+                for line in file.readlines()[1:20]:
+                    bem = BemViewModel.from_csv(line)
 
-                with open(local + filename, 'r') as file:
-                    for line in file.readlines()[1:20]:
-                        bem = BemViewModel.from_csv(line)
-
-                        for candidato in self.__candidatos:
-                            if candidato.id_candidato == bem.id_candidato:
-                                candidato.append_bem(bem)
+                    for candidato in self.__candidatos:
+                        if candidato.id_candidato == bem.id_candidato:
+                            candidato.append_bem(bem)
 
     # TODO 4 OK
     def show(self, the_list):
@@ -69,7 +66,7 @@ class Controller():
 
 def main():
     times = {}
-    c = Controller()
+    c = Controller(orderby=lambda a, b: Ordering.compare(a, b, asceding=False, key=lambda x: x.nome_na_urna))
 
     start = time.time()
     c.load_candidatos("./data/candidatos/")
@@ -88,14 +85,18 @@ def main():
     start = time.time()
     c.show(c.search(query=lambda x: x.nome_na_urna.lower().startswith("pedro") ))
     total = time.time() - start
-    times["query-show"] = total
+    times["query-and-show"] = total
 
     print(f"> Time to query and show: {round(total, 4)}")
 
 
     with open('./out_time.txt', 'w') as file:
-        for k, v in times:
-            file.readline(f"[{k}]: {round(v, 4)}s")
+        out = ""
+        
+        for k, v in times.items():
+            out += f"[{k}]: {round(v, 4)}s\n"
+        
+        file.write(out)
 
 if __name__ == "__main__":
     main()

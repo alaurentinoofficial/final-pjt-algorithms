@@ -6,7 +6,7 @@ class Bem:
         self.__cod_tipo = cod_tipo # Código do tipo de bem
         self.__desc_tipo = desc_tipo # Descrição do tipo de bem
         self.__desc_detalhada = desc_detalhada # Descrição detalhada do bem
-        self.__valor = valor # Valor do bem
+        self.__valor = int(valor) # Valor do bem
     
     def __str__(self):
         out = f"""

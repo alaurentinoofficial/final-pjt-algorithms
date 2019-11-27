@@ -33,7 +33,7 @@ class Candidato:
         
         Resumo dos bens:
         \t- Total declarado: {sum([bem.valor for bem in self.__bens])}
-        \t- Total por tipo de bem:\n
+        \t- Total por tipo de bem:
         """
 
         tipo_bens = {}
@@ -43,7 +43,7 @@ class Candidato:
             tipo_bens[bem.desc_tipo] = bem.valor + (0 if bem.desc_tipo not in tipo_bens else tipo_bens[bem.desc_tipo])
 
         for tipo, valor in tipo_bens.items():
-            out += f"\t\t- {tipo}: R$ {valor}"
+            out += f"\t\t- {tipo}: R$ {valor} \n"
 
         return out
     
