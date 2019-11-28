@@ -1,4 +1,4 @@
-import os, time
+import time
 from utils import list_csv_from
 from models import Candidato, Bem
 from views import CandidatoViewModel, BemViewModel
