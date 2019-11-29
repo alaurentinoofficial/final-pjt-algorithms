@@ -17,7 +17,7 @@ class Controller():
     def load_candidatos(self, local):
         for filename in list_csv_from(local):
             with open(local + filename, 'r') as file:
-                for line in file.readlines()[1:20]:
+                for line in file.readlines()[1:]:
                     c = CandidatoViewModel.from_csv(line)
                     self.__candidatos.append(c)
     
@@ -27,7 +27,7 @@ class Controller():
 
         for filename in list_csv_from(local):
             with open(local + filename, 'r') as file:
-                for line in file.readlines()[1:20]:
+                for line in file.readlines()[1:]:
                     bem = BemViewModel.from_csv(line)
 
                     for candidato in self.__candidatos:
