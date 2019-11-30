@@ -1,9 +1,13 @@
 class Ordering:
+    
     @staticmethod
-    def compare(a, b, asceding=True, key=lambda x: x):
-        asceding_multiplier = 1 if asceding else -1
+    def compare(asceding=True, key=lambda x: x):
+        def wrapper(a, b):
+            asceding_multiplier = 1 if asceding else -1
 
-        return ((key(a) > key(b)) - (key(a) < key(b))) * asceding_multiplier
+            return ((key(a) > key(b)) - (key(a) < key(b))) * asceding_multiplier
+        
+        return wrapper
 
 
 class Node:
@@ -41,12 +45,12 @@ class Node:
 
 class DoubleChainList:
 
-    def __init__(self, interable=None, orderby=lambda a, b: Ordering.compare(a, b, asceding=True, key=lambda x: x)):
+    def __init__(self, interable=None, orderby=lambda a, b: 1):
         self.__root = None
         self.__top = None
         self.__size = 0
-        self.__compare = orderby
         self.__interations = 0
+        self.__compare = orderby
 
         if interable != None:
             for item in interable:
@@ -81,18 +85,12 @@ class DoubleChainList:
 
         while pivot.next != None and self.__compare(node.value, pivot.next.value) == 1:
             pivot = pivot.next
-        
-        if self.__compare(node.value, pivot.value) != 1:
-            self.__root.previous = node
-            node.next = self.__root
-            
-            self.__root = node
-        else:
-            next_node = pivot.next
-            pivot.next = node
 
-            node.previous = pivot
-            node.next = next_node
+        aux_next = pivot.next
+        pivot.next = node
+
+        node.previous = pivot
+        node.next = aux_next
     
 
     def _get_item(self, index):

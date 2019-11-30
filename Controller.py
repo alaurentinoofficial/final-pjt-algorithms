@@ -1,13 +1,16 @@
 import time
-from utils import list_csv_from
-from models import Candidato, Bem
-from views import CandidatoViewModel, BemViewModel
+from list_csv_files import list_csv_from
+from Candidato import Candidato
+from Bem import Bem
+from CandidatoViewModel import CandidatoViewModel
+from BemViewModel import BemViewModel
+from HashTable import HashTable
 from DoubleChainList import DoubleChainList, Ordering
 
 
 class Controller():
-    def __init__(self, orderby=lambda a, b: Ordering.compare(a, b, asceding=True, key=lambda x: x)):
-        self.__candidatos = DoubleChainList(orderby=orderby)
+    def __init__(self, orderby=None):
+        self.__candidatos = DoubleChainList(orderby=lambda a, b: orderby(a, b) if orderby != None else None)
     
     @property
     def candidatos(self):
@@ -23,16 +26,21 @@ class Controller():
     
     # TODO 2 OK
     def load_bens(self, local):
-        bens = DoubleChainList()
+        bens = HashTable()
 
         for filename in list_csv_from(local):
             with open(local + filename, 'r') as file:
                 for line in file.readlines()[1:]:
                     bem = BemViewModel.from_csv(line)
 
-                    for candidato in self.__candidatos:
-                        if candidato.id_candidato == bem.id_candidato:
-                            candidato.append_bem(bem)
+                    if bem.id_candidato in bens:
+                        bens[bem.id_candidato].append(bem)
+                    else:
+                        bens[bem.id_candidato] = DoubleChainList([bem])
+
+        for candidato in self.__candidatos:
+            if candidato.id_candidato in bens:
+                candidato.bens = bens[candidato.id_candidato]
 
     # TODO 4 OK
     def show(self, the_list):
@@ -46,7 +54,7 @@ class Controller():
     # TODO 5 OK
     def average(self, attribute=""):
         if hasattr(Candidato(), attribute):
-            groups = {}
+            groups = HashTable()
 
             for candidate in self.__candidatos:
                 group = getattr(candidate, attribute)
@@ -66,7 +74,7 @@ class Controller():
 
 def main():
     times = {}
-    c = Controller(orderby=lambda a, b: Ordering.compare(a, b, asceding=False, key=lambda x: x.nome_na_urna))
+    c = Controller(orderby=Ordering.compare(asceding=False, key=lambda x: x.nome_na_urna))
 
     start = time.time()
     c.load_candidatos("./data/candidatos/")
@@ -83,7 +91,8 @@ def main():
     print(f"> Time to load bens: {total}")
 
     start = time.time()
-    c.show(c.search(query=lambda x: x.nome_na_urna.lower().startswith("pedro") ))
+    (c.show(
+            c.search(query=lambda x: x.nome_na_urna.lower().startswith("a"))))
     total = time.time() - start
     times["query-and-show"] = total
 
