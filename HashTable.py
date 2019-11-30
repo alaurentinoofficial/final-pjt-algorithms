@@ -26,8 +26,15 @@ class HashTable:
             for item in self.__table[hash_key]:
                 if item[0] == key:
                     return item[1]
-        
-        return None
+    
+    def pop(self, key):
+        hash_key = self.hashing_fn(key)
+
+        if hash_key < len(self.__table):
+            for i, item in enumerate(self.__table[hash_key]):
+                if item[0] == key:
+                    item.pop(i)
+                    return
 
 if __name__ == "__main__":
     map_table = HashTable()
