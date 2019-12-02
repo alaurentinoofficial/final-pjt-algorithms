@@ -26,9 +26,9 @@ class Controller():
     
     # TODO 2 OK
     def load_bens(self, local):
-        bens = HashTable()
-
         for filename in list_csv_from(local):
+            bens = HashTable()
+
             with open(local + filename, 'r') as file:
                 for line in file.readlines()[1:]:
                     bem = BemViewModel.from_csv(line)
@@ -38,12 +38,15 @@ class Controller():
                     else:
                         bens[bem.id_candidato] = DoubleChainList([bem])
 
-        for candidato in self.__candidatos:
-            if candidato.id_candidato in bens:
-                candidato.bens = bens[candidato.id_candidato]
+            for candidato in self.__candidatos:
+                if candidato.id_candidato in bens:
+                    candidato.bens = bens[candidato.id_candidato]
+            
+            del(bens)
 
     # TODO 4 OK
-    def show(self, the_list):
+    @staticmethod
+    def show(the_list):
         for item in the_list:
             print(str(item))
 
@@ -74,8 +77,13 @@ class Controller():
 
 def main():
     times = {}
-    c = Controller(orderby=Ordering.compare(asceding=False, key=lambda x: x.nome_na_urna))
 
+    # With the Ordering compare you can pass the parameters to sort the candidates into a controller
+    # asceding = enables the asceding order like {1, 2, 3, 4}, or when disabled {4, 3, 2, 1}
+    # key = select the field will be used to sort
+    c = Controller(orderby=Ordering.compare(asceding=True, key=lambda x: x.nome_na_urna))
+
+    # Load the candidates
     start = time.time()
     c.load_candidatos("./data/candidatos/")
     total = time.time() - start
@@ -83,6 +91,7 @@ def main():
 
     print(f"> Time to load candidatos: {total}")
 
+    # Load the bens
     start = time.time()
     c.load_bens("./data/bens/")
     total = time.time() - start
@@ -90,8 +99,10 @@ def main():
 
     print(f"> Time to load bens: {total}")
 
+    # Makes a query into candidates and print in screen
+    # query = lambda which returns a boolean type (True/False)
     start = time.time()
-    (c.show(
+    (Controller.show(
             c.search(query=lambda x: x.nome_na_urna.lower().startswith("a"))))
     total = time.time() - start
     times["query-and-show"] = total

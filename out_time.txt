@@ -1,3 +1,3 @@
-[candidatos]: 0.3892s
-[bens]: 0.1191s
-[query-and-show]: 0.1274s
+[candidatos]: 0.2788s
+[bens]: 0.1163s
+[query-and-show]: 0.1306s
